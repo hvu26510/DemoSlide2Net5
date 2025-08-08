@@ -5,14 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//them Dbcontext
-builder.Services.AddDbContext<ApplicationDbContext>(options => 
+//Them dbcontext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-//them Identity
+//them identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+//Them policy de dung cho authorize
+builder.Services.AddAuthorization(option =>
+{
+    option.AddPolicy("DeletePolicy", policy => policy.RequireClaim("Delete"));
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -32,8 +37,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

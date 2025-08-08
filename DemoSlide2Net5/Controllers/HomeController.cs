@@ -1,4 +1,5 @@
 using DemoSlide2Net5.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -16,6 +17,12 @@ namespace DemoSlide2Net5.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [Authorize]
+        public IActionResult Secured()
+        {
+            return View((object)"Hello");
         }
 
         public IActionResult Privacy()
